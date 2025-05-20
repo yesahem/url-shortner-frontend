@@ -29,20 +29,12 @@ export function Welcome() {
               size={"default"}
               className="bg-blue-600 ml-0.5  h-12 cursor-pointer"
               onClick={() => {
-                alert("Add the API here");
-
-                if (
-                  inputRef.current?.value.startsWith("https://") &&
-                  inputRef.current?.value.includes(".com") &&
-                  inputRef.current.value.length > 12
-                ) {
-                  console.log(!inputRef.current?.value.startsWith("https://"));
-                  console.log("Input value is : ", inputRef?.current?.value);
-
-                  console.log("Entered url is  valid ");
-                  return;
+                const validURL = new URL(inputRef.current?.value!);
+                console.log("isURl valid: ", validURL);
+                if (validURL instanceof URL) {
+                  console.log("valid url mkc ");
+                  console.log("URL.href ko db me daalna hai mitra");
                 }
-                console.log("incorrect url");
               }}
             >
               {" "}
