@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import axios from "axios";
 
 import { useRef, useState } from "react";
 import { Copy, ExternalLink, LinkIcon, Sparkles } from "lucide-react";
@@ -16,6 +17,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { toast } from "sonner";
+
 
 export default function Dashboard() {
   const [shortUrl, setShortUrl] = useState("");
@@ -33,23 +35,39 @@ export default function Dashboard() {
     setIsLoading(true);
 
     // Simulate API call
-    setTimeout(() => {
-      const randomString = Math.random().toString(36).substring(2, 7);
-      const newShortUrl = `chotu.link/${randomString}`;
-      setShortUrl(newShortUrl);
+    // setTimeout(() => {
+    //   const randomString = Math.random().toString(36).substring(2, 7);
+    //   const newShortUrl = `chotu.link/${randomString}`;
+    //   setShortUrl(newShortUrl);
 
-      // Add to history
-      setHistory([
-        {
-          original: inputRef.current?.value || "",
-          shortened: newShortUrl,
-          date: new Date().toLocaleDateString(),
-        },
-        ...history,
-      ]);
+    //   // Add to history
+    //   setHistory([
+    //     {
+    //       original: inputRef.current?.value || "",
+    //       shortened: newShortUrl,
+    //       date: new Date().toLocaleDateString(),
+    //     },
+    //     ...history,
+    //   ]);
 
-      setIsLoading(false);
-    }, 800);
+    //   setIsLoading(false);
+    // }, 800);
+
+    try {
+      new URL(inputRef.current.value ?? " ");
+
+      const data = await axios.post(`http://localhost:3000/api/shorten/`, {
+        longUrl: inputRef.current.value,
+      });
+
+      console.log("axios Data: ", data)
+
+      setShortUrl(data?.data?.shortUrl)
+      
+      setIsLoading(false)
+    } catch (err) {
+      console.log("invalid url")
+    }
   };
 
   const copyToClipboard = (text: string) => {
